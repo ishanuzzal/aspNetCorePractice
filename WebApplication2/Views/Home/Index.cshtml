@@ -1,0 +1,35 @@
+﻿@model WebApplication2.Models.StudentModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <a asp-controller="Home" asp-action="About">About</a>
+    
+    <form asp-controller="Home" asp-action="index", method="post">
+        <div class="form-group">
+
+        <label asp-for="@Model.Name">Enter Your name</label> <br />
+        <input asp-for="@Model.Name"/> <br />
+        <span asp-validation-for="@Model.Name"></span>
+        </div>
+        <div class="form-group">
+
+        <label asp-for="@Model.Id">Enter Your Id</label> <br />
+        <input asp-for="@Model.Id" />
+        </div>
+        <div class="form-group">
+        <label asp-for="@Model.Age">Enter Your Age</label> <br />
+        <input asp-for="@Model.Age" />
+        </div>
+
+        <div class="form-group">
+        <label asp-for="@Model.Gender">Enter Your Gender</label> <br />
+        <input asp-for="@Model.Gender" />
+        </div>
+        <button type="submit" value="submit">Submit</button>
+    </form>
+    
+</div>

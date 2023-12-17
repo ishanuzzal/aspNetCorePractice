@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "About";
+    Layout = "_Layout1";
+}
+
+<h1>About</h1>
+<h1>Time is @DateTime.Now</h1>
+@{
+    var a = 1;
+    if (a == 0)
+    {
+        <h1>Hello 0</h1>
+    }
+    else
+    {
+        <h1>hello 1</h1>
+    }
+
+   
+        foreach (var item in (List<int>)ViewData["d2"])
+        {
+           <p>@item</p> 
+        }
+        <p>@TempData["d3"]</p>
+
+}
+
