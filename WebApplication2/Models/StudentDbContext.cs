@@ -15,6 +15,7 @@ namespace WebApplication2.Models
         }
 
         public DbSet<StudentModel> Students { get; set; }
+        public DbSet<UserModel> Users { get; set; }
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {
              optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=SchoolDB;Trusted_Connection=True;");

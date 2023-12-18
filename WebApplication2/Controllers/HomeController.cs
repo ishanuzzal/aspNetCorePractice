@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WebApplication2.Models;
 using WebApplication2.Repository;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication2.Controllers
 {
@@ -10,17 +11,22 @@ namespace WebApplication2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly StudentDbContexts studentsDB;
+        private readonly StudentDbContexts studentsDBContext;
         public HomeController(ILogger<HomeController> logger, StudentDbContexts s)
         {
             _logger = logger;
-            this.studentsDB = s;
+            this.studentsDBContext = s;
         }
 
         [Route("~/")]
         [Route("~/Home")]
         public IActionResult Index()
         {
+            string? s = HttpContext.Session.GetString("user");
+            if (s == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View(); 
         }
         [Route("~/Home")]
@@ -31,8 +37,8 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                   await studentsDB.Students.AddAsync(st);
-                   await studentsDB.SaveChangesAsync();
+                   await studentsDBContext.Students.AddAsync(st);
+                   await studentsDBContext.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -43,26 +49,52 @@ namespace WebApplication2.Controllers
             //return RedirectToAction("Privacy", "Home");
             return View(st);
         }
-       
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(UserModel user)
+        {
+            var validUser = studentsDBContext.Users.Where(x=>(x.UserName==user.UserName) && x.Password==user.Password).FirstOrDefault();
+            if (validUser != null)
+            {
+                HttpContext.Session.SetString("user", user.UserName);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.error = user;
+            }
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("user");
+            return RedirectToAction("Index", "Home");
+        }
+
         public async Task<IActionResult> Display()
         {
-            var st = await studentsDB.Students.ToListAsync();
+            var st = await studentsDBContext.Students.ToListAsync();
             return View(st);
         }
 
         public async Task<String> Details(int id)
         {
-            var st = await studentsDB.Students.FirstOrDefaultAsync(x=>id==x.Id);
+            var st = await studentsDBContext.Students.FirstOrDefaultAsync(x=>id==x.Id);
             return "Id: "+st.Id+" name: "+st.Name;
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var st = await studentsDB.Students.FirstOrDefaultAsync(x => id == x.Id);
+            var st = await studentsDBContext.Students.FirstOrDefaultAsync(x => id == x.Id);
             if (st != null)
             {
-                studentsDB.Students.Remove(st);
-                await studentsDB.SaveChangesAsync();
+                studentsDBContext.Students.Remove(st);
+                await studentsDBContext.SaveChangesAsync();
                 return RedirectToAction("Display", "Home");
             }
             return NotFound();
@@ -79,8 +111,10 @@ namespace WebApplication2.Controllers
         {
             ViewData["d1"] = "data1";
             ViewBag.d2 = new List<int>(){1,2,3,4};
-            TempData["d3"] = 24;
-            TempData.Keep("d3");
+            if (HttpContext.Session.GetString("key") != null)
+            {
+                ViewBag.key = HttpContext.Session.GetString("key");
+            }
             return View();
         }
 
