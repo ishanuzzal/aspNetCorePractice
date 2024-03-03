@@ -7,8 +7,8 @@
         public int? StockId { get; set; }
         public Stock? Stock { get; set; }
 
-        public string UserId { get; set; }
-        public AppUser User { get; set; }
+        public string? UserId { get; set; }
+        public AppUser? User { get; set; }
 
     }
 }

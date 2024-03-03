@@ -4,6 +4,6 @@ namespace WebApi.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser appuser);
+        string CreateToken(AppUser appuser,string role);
     }
 }

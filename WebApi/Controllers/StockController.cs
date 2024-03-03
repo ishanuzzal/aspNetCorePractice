@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> GetAll([FromQuery] QueryStockPerameter qu) {
             var stocks = await _stockRepo.GetAllAsync(qu);
             var stock =  stocks.Select(s=>s.ToStockDto());

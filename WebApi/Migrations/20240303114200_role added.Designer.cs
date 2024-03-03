@@ -11,8 +11,8 @@ using WebApi.Data;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240229105732_user field added in comment model")]
-    partial class userfieldaddedincommentmodel
+    [Migration("20240303114200_role added")]
+    partial class roleadded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,13 +50,13 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "74ae8a43-1792-4687-b080-4f46439b6c59",
+                            Id = "aceec53d-eeb3-4d9c-8f8b-dac4a2d5e3ec",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ef2c2bcc-f3fd-4d51-ab76-03315607fe4d",
+                            Id = "ed1ea9fa-c9ea-41bc-b2ca-292246c1c65b",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -206,6 +206,9 @@ namespace WebApi.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -242,7 +245,6 @@ namespace WebApi.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
@@ -351,9 +353,7 @@ namespace WebApi.Migrations
 
                     b.HasOne("WebApi.Models.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Stock");
 

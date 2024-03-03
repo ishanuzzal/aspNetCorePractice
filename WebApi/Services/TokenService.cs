@@ -13,12 +13,15 @@ namespace WebApi.Services
             _config = config;
             _key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config["JWT:Signingkey"]));
         }
-        public string CreateToken(AppUser appuser)
+        public string CreateToken(AppUser appuser, string r)
         {
+            var a = r;
+
             var claim = new List<Claim>
             {
                 //new Claim(JwtRegisteredClaimNames.Email, appuser.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName,appuser.UserName)
+                new Claim(JwtRegisteredClaimNames.GivenName,appuser.UserName),
+                new Claim(ClaimTypes.Role,r)
             };
 
             var creeds = new SigningCredentials(_key,SecurityAlgorithms.HmacSha512Signature);
